@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Chat app</h1>
+<div class="content"></div>
+<form>
+    <input type="text" name="chatinput">
+</form>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function initWebSocketClient(){
+      var $content = $('.content');
+      var client = new WebSocket("ws://localhost:8080");
+
+      client.onmessage = function (event) {
+        $content.append('<p>'+ event.data +'</p>');
+      }
+
+      $('form').submit(function (event) {
+        var $input = $('input[name=chatinput]');
+        event.preventDefault();
+        client.send($input.val());
+        $input.val('');
+      });
+    }
+
+    $(document).ready(function () {
+      initWebSocketClient();
+    });
+</script>
+</html>
